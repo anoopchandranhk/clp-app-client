@@ -38,8 +38,8 @@ export const ThemeContextProvider = ({
   /**
    * Apply theme to 'html' tag on DOM.
    */
-  const applyTheme = (theme: string = "default") => {
-    let newTheme = theme;
+  const applyTheme = (theme = "default") => {
+    const newTheme = theme;
     const html = document.getElementsByTagName("html")[0];
     localStorage.setItem("theme", theme);
     (html as any).setAttribute("data-theme", newTheme);
@@ -58,7 +58,7 @@ export const ThemeContextProvider = ({
       theme,
       setTheme: handleThemeChange,
     }),
-    [theme]
+    [handleThemeChange, theme]
   );
 
   return <ThemeContext.Provider value={val}>{children}</ThemeContext.Provider>;

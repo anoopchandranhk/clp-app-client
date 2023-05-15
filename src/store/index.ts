@@ -1,10 +1,20 @@
-import { create } from "zustand";
+import { create, SetState } from "zustand";
 import merge from "lodash.merge";
+import { PollResult } from "../types/pollResult";
 
-const useStore = create((set) => ({
+type UpdatePollState = (update: PollResult) => void;
+
+type StoreState = {
+  pollResults: PollResult;
+  updatePollState: UpdatePollState;
+};
+
+const useStore = create<StoreState>((set: SetState<StoreState>) => ({
   pollResults: {},
-  updatePollState: (update: any) =>
-    set((state: any) => merge(state.pollResults, update)),
+  updatePollState: (update: PollResult) =>
+    set((state: StoreState) => ({
+      pollResults: merge(state.pollResults, update),
+    })),
 }));
 
 export default useStore;

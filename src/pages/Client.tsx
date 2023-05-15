@@ -2,6 +2,7 @@
 import Button from "../components/atoms/Button";
 import { socket, joinRoom } from "../config/socketInitializer";
 import useStore from "../store/index";
+import { PollResult } from "../types/pollResult";
 
 const Client = () => {
   // Add choices here
@@ -24,7 +25,7 @@ const Client = () => {
   ];
 
   // Get the store
-  const { pollResults, updatePollState }: any = useStore();
+  const { pollResults, updatePollState } = useStore();
 
   // Join the socket room
   joinRoom("main_room");
@@ -32,7 +33,7 @@ const Client = () => {
   // Click function of buttons
   // Create payload, Update the store and emit to the server
   const sendChoice = (choice: string) => {
-    let payload = {};
+    let payload: PollResult = {};
     if (!pollResults[socket.id]) {
       payload = {
         [socket.id]: {
