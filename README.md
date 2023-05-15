@@ -1,4 +1,6 @@
-# This is an asssignment project for clp
+# Vote Clicker app
+
+This is an asssignment project for clp
 
 This is a powerful and user-friendly vote clicker app that allows clients to record one or more clicks, while the number of clicks gets instantly logged into the dashboard page. The app features a sleek and intuitive interface that provides users with an engaging and interactive experience.
 

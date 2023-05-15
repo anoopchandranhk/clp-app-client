@@ -8,6 +8,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { PollResult } from "../types/pollResult";
 
 ChartJS.register(
   CategoryScale,
@@ -37,7 +38,7 @@ const options = {
   },
 };
 
-function convertData(data: { [key: string]: { [key: string]: number } }): {
+function convertData(data: PollResult): {
   labels: string[];
   datasets: {
     label: string;
