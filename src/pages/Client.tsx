@@ -1,31 +1,12 @@
-// import { useState, useEffect } from "react";
+import { FC } from "react";
 import Button from "../components/atoms/Button";
 import { socket, joinRoom } from "../config/socketInitializer";
-import useStore from "../store/index";
-import { PollResult } from "../types/pollResult";
+import useStore from "../store";
+import { PollResult } from "../types";
 
-const Client = () => {
-  // Add choices here
-  const choices = [
-    {
-      label: "Choice One",
-      option: "choiceOne",
-      class: "bg-orange-600 text-white",
-    },
-    {
-      label: "Choice Two",
-      option: "choiceTwo",
-      class: "bg-blue-600 text-white",
-    },
-    // {
-    //   label: "Choice three",
-    //   option: "choicethree",
-    //   class: "bg-green-600 text-white",
-    // },
-  ];
-
+const Client: FC = () => {
   // Get the store
-  const { pollResults, updatePollState } = useStore();
+  const { choicesData, pollResults, updatePollState } = useStore();
 
   // Join the socket room
   joinRoom("main_room");
@@ -43,8 +24,6 @@ const Client = () => {
       updatePollState(payload);
     } else {
       if (!pollResults[socket.id][choice]) {
-        console.log("trigger 2");
-
         payload = {
           [socket.id]: {
             ...pollResults[socket.id],
@@ -53,19 +32,16 @@ const Client = () => {
         };
         updatePollState(payload);
       } else {
-        console.log("trigger 3");
-
         payload = {
           [socket.id]: {
             ...pollResults[socket.id],
             [choice]: pollResults[socket.id][choice] + 1,
           },
         };
+
         updatePollState(payload);
       }
     }
-    // console.log(pollResults, "pollsResult");
-    // console.log(payload, "payload");
     socket.emit("send_message", pollResults);
   };
 
@@ -73,18 +49,18 @@ const Client = () => {
     <div>
       <main className="py-10 px-5 flex flex-col gap-10 text-center my-auto">
         <section>
-          <h1 className="text-xl">You have two choices</h1>
+          <h1 className="text-xl">{`You have ${choicesData.length} choices`}</h1>
 
           <div className="flex flex-row flex-wrap gap-10 justify-center mx-auto mt-12">
-            {choices.map((choice) => {
+            {choicesData.map(({ label, option, color }) => {
               return (
                 <Button
                   btnType="secondary"
-                  className={choice.class}
-                  key={choice.option}
-                  onClick={() => sendChoice(choice.option)}
+                  className={`bg-${color}-600 text-white`}
+                  key={option}
+                  onClick={() => sendChoice(option)}
                 >
-                  {choice.label}
+                  {label}
                 </Button>
               );
             })}

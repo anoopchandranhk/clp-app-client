@@ -1,12 +1,21 @@
 import { useEffect } from "react";
+import { ChoiceData, PollResult, UpdatePollState } from "../types";
 // Connect to Store
-import useStore from "../store/index";
+import useStore from "../store";
 import { HorizontalBarChart } from "../components/HorizontalBarChart";
 // Initialise the Socket
 import { socket, joinRoom } from "../config/socketInitializer";
 const Dashboard = () => {
   // Get the store
-  const { pollResults, updatePollState }: any = useStore();
+  const {
+    choicesData,
+    pollResults,
+    updatePollState,
+  }: {
+    choicesData: ChoiceData[];
+    pollResults: PollResult;
+    updatePollState: UpdatePollState;
+  } = useStore();
   // Join the main_room in Socket
   joinRoom("main_room");
   // Receive the payload and update Store
@@ -15,7 +24,7 @@ const Dashboard = () => {
       updatePollState(data);
     });
   }, [updatePollState]);
-  // Five second Timer
+  // TODO Five second Timer
 
   return (
     <div>
@@ -25,7 +34,7 @@ const Dashboard = () => {
             <div className="w-[50rem] min-w-[50%]">
               <h1> Poll Results:</h1>
               {/* {JSON.stringify(pollResults, null, 2)} */}
-              <HorizontalBarChart data={pollResults} />
+              <HorizontalBarChart data={pollResults} choices={choicesData} />
             </div>
           </div>
         </div>

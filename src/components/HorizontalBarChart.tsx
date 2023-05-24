@@ -8,7 +8,8 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { PollResult } from "../types/pollResult";
+import { ChoiceData, PollResult } from "../types";
+import { hexToRgb } from "../utils/hexToRgb.js";
 
 ChartJS.register(
   CategoryScale,
@@ -18,6 +19,12 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+import resolveConfig from "tailwindcss/resolveConfig";
+import tailwindConfig from "../../tailwind.config.cjs";
+
+const fullConfig = resolveConfig(tailwindConfig);
+const colors = fullConfig.theme.colors;
 
 const options = {
   indexAxis: "y" as const,
@@ -38,7 +45,11 @@ const options = {
   },
 };
 
-function convertData(data: PollResult): {
+const choiceData: { [key: string]: number[] } = {};
+function convertData(
+  data: PollResult,
+  choices: ChoiceData[]
+): {
   labels: string[];
   datasets: {
     label: string;
@@ -48,40 +59,44 @@ function convertData(data: PollResult): {
   }[];
 } {
   const labels: string[] = [];
-  const choiceOneData: number[] = [];
-  const choiceTwoData: number[] = [];
+  choices.forEach(({ option }: { option: string }) => {
+    choiceData[`${option}Data`] = [];
+  });
 
   Object.keys(data).forEach((key, i) => {
     const user = `User ${i + 1}`;
     labels.push(user);
-    choiceOneData.push(data[key].choiceOne);
-    choiceTwoData.push(data[key].choiceTwo);
+    Object.keys(data[key]).forEach((choice) => {
+      choiceData[`${choice}Data`].push(data[key][choice]);
+    });
   });
 
   const convertedData = {
     labels: labels,
-    datasets: [
-      {
-        label: "choiceOne",
-        data: choiceOneData,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-      {
-        label: "choiceTwo",
-        data: choiceTwoData,
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
-      },
-    ],
+    datasets: choices.map(
+      ({ option, color }: { option: string; color: string }) => {
+        return {
+          label: option,
+          data: choiceData[`${option}Data`],
+          borderColor: `rgb(${hexToRgb(colors[color]["600"])})`,
+          backgroundColor: `rgba(${hexToRgb(colors[color]["600"])}, 0.5)`,
+        };
+      }
+    ),
   };
 
   return convertedData;
 }
 
-export function HorizontalBarChart({ data }: any) {
+export function HorizontalBarChart({
+  data,
+  choices,
+}: {
+  data: PollResult;
+  choices: ChoiceData[];
+}) {
   if (Object.keys(data).length > 0) {
-    return <Bar options={options} data={convertData(data)} />;
+    return <Bar options={options} data={convertData(data, choices)} />;
   } else {
     return <div>No data</div>;
   }

@@ -10,6 +10,10 @@ Built using React and Vite, this app is lightweight, fast, and highly scalable, 
 
 Overall, this vote clicker app is perfect for conducting polls, surveys, and feedback forms, providing users with an innovative and engaging way to collect and visualize data.
 
+## Adding more Choices or Buttons
+
+You can add more buttons in ../src/config/choices.ts
+
 ## Getting Started
 
 ### Prerequisites
@@ -37,6 +41,7 @@ Overall, this vote clicker app is perfect for conducting polls, surveys, and fee
 ## Features
 
 - Real-time logging of clicks
+- Add any number of choices for the Poll, it will be automatically charted in dashboard
 
 ## Technologies Used
 
