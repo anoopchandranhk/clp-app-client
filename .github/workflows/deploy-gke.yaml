@@ -53,11 +53,15 @@ jobs:
       #
       # Build the code
       #
-      - name: Build solution
-        run: |-
-          npm i -g pnpm 
-          pnpm install 
-          pnpm run dev
+      - name: Install PNPM
+        run: |
+          npm i -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build the app
+        run: pnpm run dev
 
       #
       # Build the Docker image and push it to Artifact Registry
