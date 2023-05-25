@@ -4,6 +4,7 @@ import daisyui from 'daisyui'
 export default {
   content: [
     "./index.html",
+    "./src/**/**/*.{js,ts,jsx,tsx}",
     "./src/**/*.{js,ts,jsx,tsx}",
     "./src/*.{js,ts,jsx,tsx}",
   ],
@@ -14,4 +15,9 @@ export default {
     themes: [
     ],
   },
+  safelist: [
+    {
+      pattern: /bg-(red|green|blue|orange)-(600)/, // You can display all the colors that you need
+    },
+  ],
 };
