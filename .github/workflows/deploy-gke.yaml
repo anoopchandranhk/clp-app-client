@@ -63,9 +63,6 @@ jobs:
       - name: Build the app
         run: pnpm run build
 
-      - name: run the app
-        run: pnpm run preview
-
       #
       # Build the Docker image and push it to Artifact Registry
       #
