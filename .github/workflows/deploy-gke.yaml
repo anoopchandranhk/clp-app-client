@@ -69,11 +69,8 @@ jobs:
       - name: Create image tag
         run: echo "IMAGE_TAG=${{ env.REPOSITORY_REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:$GITHUB_SHA" >> $GITHUB_ENV
 
-      - name: Lock image version in deployment.yaml
-        run: sed -i 's|clp-app-client_IMAGE|${{ env.IMAGE_TAG }}|g' applications/clp-app-client/netcore/deployment.yaml
-
       - name: Build Docker image
-        run: docker build --tag "${{ env.IMAGE_TAG }}" applications/clp-app-client/netcore
+        run: docker build --tag "${{ env.IMAGE_TAG }}" .
 
       - name: Publish Docker image to Google Artifact Registry
         run: docker push "${{ env.IMAGE_TAG }}"
